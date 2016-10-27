@@ -25,12 +25,13 @@ public class Expression {
 	}
 	public boolean isComplementary(Expression expression) {
 		
-		return name.equals(expression.name) && complement != expression.complement;
+		return isFeuille() && name.equals(expression.name) && complement != expression.complement;
+	}
+	private boolean isFeuille() {
+		return operator == null && rightExpression == null && leftExpression==null;
 	}
 	
-	public void addExpression(Expression expression){
-		
-	}
+
 	
 
 }

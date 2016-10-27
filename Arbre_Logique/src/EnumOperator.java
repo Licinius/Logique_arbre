@@ -2,6 +2,6 @@
 public enum EnumOperator {
 	AND,
 	OR,
-	IMPLICATION;
-
+	IMPLICATION,
+	EQUIVALENCE;
 }

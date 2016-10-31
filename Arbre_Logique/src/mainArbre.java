@@ -9,10 +9,12 @@ public class mainArbre {
 		Expression E1 = new Expression("p",false);
 		Expression E2 = new Expression("p",true);
 		
-		Expression E3 = new Expression(true,EnumOperator.AND,E1,E2,"E3");
+		Expression E3 = new ExpressionComplexe(true,EnumOperator.AND,E1,E2,"E3");
 		main_Branch.addExpression(E1);
 		main_Branch.addExpression(E3);
 		main_Branch.addExpression(E2);
+		System.out.println(E3);
+		System.out.println(main_Branch);
 		System.out.println(main_Branch.isFalse());
 	}
 

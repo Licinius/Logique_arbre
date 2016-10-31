@@ -17,7 +17,7 @@ public class Branch {
 	
 	
 	/**
-	 * Check if the arrayList contain a complementary
+	 * Check if the arrayList contains a complementary
 	 * @return If the branch is false 
 	 */
 	public boolean isFalse(){
@@ -37,5 +37,39 @@ public class Branch {
 	 */
 	public void addExpression(Expression expression){
 		expressions.add(expression);
+	}
+	public void removeExpression(int index){
+		expressions.remove(index);
+	}
+	
+	/*public Branch developExpression(int index){
+		Branch res = new Branch(expressions);
+		Expression expr = expressions.get(index);
+		switch(expr.getOperator()){
+			case AND:
+				res.addExpression(expr.getRightExpression());
+				res.addExpression(expr.getLeftExpression());
+				res.removeExpression(index);
+				break;
+		case OR:
+			break;
+		case EQUIVALENCE:
+			break;
+		case IMPLICATION:
+			break;
+				
+		}
+		return res;
+
+	}*/
+	
+	public String toString(){
+		String res= "";
+		int i =0;
+		for (Expression expr: expressions){
+			res += (i++) + " : " +expr.toString()+"\n";
+			
+		}
+		return res;
 	}
 }

@@ -1,37 +1,43 @@
 
-public class Expression {
-
-
-	private boolean complement;
-	private EnumOperator operator;
-	private Expression rightExpression;
-	private Expression leftExpression;
+public class Expression{
 	private String name;
+	private boolean complement;
 	
 	public Expression(String name, boolean complement){
-		this.name = name;
-		this.complement = complement;
-		this.rightExpression = null;
-		this.leftExpression = null;
-		this.operator = null;
+		this.setName(name);
+		this.setComplement(complement);
+
 	}
-	public Expression(boolean complement, EnumOperator operator, Expression rightExpression, Expression leftExpression,
-			String name) {
+
+	public boolean isComplement() {
+		return complement;
+	}
+
+	public void setComplement(boolean complement) {
 		this.complement = complement;
-		this.operator = operator;
-		this.rightExpression = rightExpression;
-		this.leftExpression = leftExpression;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+	public boolean isLeaf(){
+		return true;
+	}
+	public String getNotationComplement(){
+		String res= "";
+		if(isComplement()){
+			res = "¬";
+		}
+		return res;
 	}
 	public boolean isComplementary(Expression expression) {
-		
-		return isFeuille() && name.equals(expression.name) && complement != expression.complement;
+		return isLeaf() && getName().equals(expression.getName()) && isComplement() != expression.isComplement();
 	}
-	private boolean isFeuille() {
-		return operator == null && rightExpression == null && leftExpression==null;
+	public String toString(){
+		return  getNotationComplement() + getName();
 	}
-	
-
-	
-
 }

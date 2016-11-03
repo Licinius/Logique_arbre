@@ -9,7 +9,7 @@ public class Expression{
 
 	}
 
-	public boolean isComplement() {
+	public boolean getComplement() {
 		return complement;
 	}
 
@@ -29,15 +29,40 @@ public class Expression{
 	}
 	public String getNotationComplement(){
 		String res= "";
-		if(isComplement()){
+		if(getComplement()){
 			res = "¬";
 		}
 		return res;
 	}
 	public boolean isComplementary(Expression expression) {
-		return isLeaf() && getName().equals(expression.getName()) && isComplement() != expression.isComplement();
+		return isLeaf() && getName().equals(expression.getName()) && getComplement() != expression.getComplement();
 	}
 	public String toString(){
 		return  getNotationComplement() + getName();
 	}
+
+	public EnumOperator getOperator() {
+		return null;
+	}
+	public Expression getRightExpression(){
+		return null;
+	}
+	public Expression getLeftExpression(){
+		return null;
+	}
+	
+	public boolean equals(Expression expr){
+		return name.equals(expr.getName());
+	}
+
+	public void reverseComplement() {
+		if(complement){
+			complement=false;
+		}else{
+			complement=true;
+		}
+		
+		
+	}
+
 }

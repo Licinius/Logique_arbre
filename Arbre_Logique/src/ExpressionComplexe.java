@@ -18,13 +18,57 @@ public class ExpressionComplexe extends Expression {
 
 	}
 
+	public ExpressionComplexe(ExpressionComplexe expressionComplexe) {
+		super(expressionComplexe.getName(),expressionComplexe.getComplement());
+		this.operator = expressionComplexe.operator;
+		this.rightExpression = expressionComplexe.rightExpression;
+		this.leftExpression = expressionComplexe.leftExpression;
+	}
+
 	public boolean isLeaf() {
 		return false;
 	}
 	
 	public EnumOperator getOperator(){
-
-		return operator;
+		EnumOperator res = operator;
+		if (getComplement()){
+			switch(operator){
+				case AND:
+					res = EnumOperator.OR;
+					break;
+				case OR : 
+					res = EnumOperator.AND;
+				case IMPLICATION:
+					res = EnumOperator.AND;
+				
+			}
+		}
+		return res;
+	}
+	
+	public Expression ComplementaryOfExpression(){
+		ExpressionComplexe res = new ExpressionComplexe(this);
+		if (getComplement()){
+			switch(operator){
+			case AND:
+				res.operator = EnumOperator.OR;
+				res.leftExpression.reverseComplement();
+				res.rightExpression.reverseComplement();
+				break;
+			case OR : 
+				res.operator = EnumOperator.AND;
+				res.leftExpression.reverseComplement();
+				res.rightExpression.reverseComplement();
+				break;
+			case IMPLICATION:
+				res.operator = EnumOperator.AND;
+				res.rightExpression.reverseComplement();
+				break;
+			
+		}
+		}
+		return res;
+		
 	}
 	
 	public Expression getLeftExpression(){

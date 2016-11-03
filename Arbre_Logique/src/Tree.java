@@ -56,6 +56,7 @@ public class Tree {
 	}
 	public void developExpression(int index,int level,int indexBranch){
 		Expression expr = branch.get(level).get(indexBranch).get(index);
+		//TO DO REVERSE COMPLEMENT
 		switch(expr.getOperator()){
 			case AND:
 				addExpression(expr.getRightExpression(),level+1,0);

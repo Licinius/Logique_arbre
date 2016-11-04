@@ -52,7 +52,7 @@ public class Expression{
 	}
 	
 	public boolean equals(Expression expr){
-		return name.equals(expr.getName());
+		return name.equals(expr.getName()) && complement==expr.getComplement();
 	}
 
 	public void reverseComplement() {

@@ -3,9 +3,9 @@ import java.util.Iterator;
 
 public class Tree {
 	private ArrayList<Level> bst;
-	
+
 	public class Level{
-		
+
 		public class Branch{
 			private ArrayList<Expression> expressions;
 			private ArrayList<Boolean> blockedExpressions;
@@ -14,7 +14,7 @@ public class Tree {
 				blockedExpressions = new ArrayList<Boolean>();
 				for (Expression expr : ArExpression){
 					expressions.add(expr);
-					if(expr.isLeaf())	blockedExpressions.add(true);
+					if(expr.isLiteral())	blockedExpressions.add(true);
 					else	blockedExpressions.add(false);
 				}
 			}
@@ -22,10 +22,10 @@ public class Tree {
 				expressions = new ArrayList<Expression>();
 				blockedExpressions = new ArrayList<Boolean>();
 				expressions.add(expr);
-				if(expr.isLeaf())	blockedExpressions.add(true);
+				if(expr.isLiteral())	blockedExpressions.add(true);
 				else	blockedExpressions.add(false);
 			}
-			
+
 			public Branch (){
 				expressions = new ArrayList<Expression>();
 				blockedExpressions = new ArrayList<Boolean>();
@@ -35,7 +35,7 @@ public class Tree {
 			}
 			public void addExpression(Expression expr){
 				expressions.add(expr);
-				if(expr.isLeaf())	blockedExpressions.add(true);
+				if(expr.isLiteral())	blockedExpressions.add(true);
 				else	blockedExpressions.add(false);
 			}
 			public ArrayList<Expression> getExpressions(){
@@ -48,20 +48,24 @@ public class Tree {
 				Expression expr1,expr2;
 				for(Iterator<Expression> ite1 = expressions.iterator();ite1.hasNext();){
 					expr1 = ite1.next();
-					for(Iterator<Expression> ite2 = (Iterator<Expression>) expressions.iterator();ite2.hasNext();){
-						expr2= ite2.next();
-						if (expr1.isComplementary(expr2))return true;
+					if (expr1.isLiteral()) {
+						for(Iterator<Expression> ite2 = expressions.iterator();ite2.hasNext();){
+							expr2= ite2.next();
+							if (expr2.isLiteral()) {
+								return ((Literal) expr1).isComplementary((Literal) expr2);
+							}
+						}
 					}
 				}
 				return false;
 			}
-			
-		}
-		
+
+		}//fin Branch
+
 		private ArrayList<Branch> branchs;
-		
+
 		private ArrayList<Boolean> blockedBranchs;
-		
+
 		public Level(ArrayList<Branch> ArBranch){
 			branchs = new ArrayList<Branch>();
 			blockedBranchs = new ArrayList<Boolean>();	
@@ -87,11 +91,11 @@ public class Tree {
 		public Branch getBranch(int index){
 			return branchs.get(index);
 		}
-		
+
 		public boolean isBranchBlocked(int index){
 			return blockedBranchs.get(index);
 		}
-		
+
 		public void addBranch(){
 			Branch tmp = new Branch();
 			branchs.add(tmp);
@@ -100,21 +104,21 @@ public class Tree {
 		public int size(){
 			return branchs.size();
 		}
-		
-		
-	}
-	
+
+
+	}//fin Level
+
 	public Tree(Expression expr){
-		 bst = new ArrayList<Level>();
-		 Level tmp = new Level(expr);
-		 bst.add(tmp);
+		bst = new ArrayList<Level>();
+		Level tmp = new Level(expr);
+		bst.add(tmp);
 	}
 	public Tree(){
 		bst = new ArrayList<Level>();
 		Level tmp = new Level();
 		bst.add(tmp);
 	}
-	
+
 	/**
 	 * 
 	 * @param expression to add in the ArrayList of Expression
@@ -129,7 +133,7 @@ public class Tree {
 		}
 		this.bst.get(level).getBranch(indexBranch).addExpression(expression);
 	}
-	
+
 	public void copyExpressionsExept(Expression expression,int levelBegin,int indexBranchBegin,int indexBranchEnd){
 		for(Expression expr : bst.get(levelBegin).getBranch(indexBranchBegin).getExpressions()){
 			if(!expr.equals(expression)){
@@ -138,9 +142,14 @@ public class Tree {
 		}
 	}
 	public void developExpression(int index,int level,int indexBranch){
-		Expression expr = bst.get(level).getBranch(indexBranch).getExpression(index);
-		//TO DO REVERSE COMPLEMENT and check only complexe
-		switch(expr.getOperator()){
+		if (!bst.get(level).getBranch(indexBranch).getExpression(index).isLiteral()) {
+			Complexe expr = (Complexe) bst.get(level).getBranch(indexBranch).getExpression(index);
+
+			if (!expr.getComplement()) {
+				expr = expr.ComplementaryOfExpression();
+			}
+
+			switch(expr.getOperator()){
 			case AND:
 				addExpression(expr.getRightExpression(),level+1,0);
 				addExpression(expr.getLeftExpression(),level+1,0);
@@ -153,19 +162,20 @@ public class Tree {
 				copyExpressionsExept(expr,level,0,1);
 				break;
 			case IMPLICATION:
+				expr.getLeftExpression().reverseComplement();
+				expr.setOperator(EnumOperator.OR);
 				break;
-				
+			}
 		}
-
 	}
 	public String toStringExpressionOfBranch(int level,int indexBranch){
 		String res= "";
 		int i =0;
 		for (Expression expr: bst.get(level).getBranch(indexBranch).getExpressions()){
 			res += (i++) + " : " +expr.toString()+"\n";
-			
+
 		}
 		return res;
 	}
-	
+
 }

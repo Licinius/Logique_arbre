@@ -1,17 +1,17 @@
+package Arbre_Completion;
 
 public class Complexe extends Expression {
 
 	private EnumOperator operator;
 	private Expression rightExpression;
 	private Expression leftExpression;
-	private int numOp;
+	private String code;
 	private static int staticCpt = 0;
 
 
-
 	public Complexe(boolean complement, EnumOperator operator, Expression rightExpression, Expression leftExpression) {
-		super(complement);
-		numOp = staticCpt++;
+		super(complement, "E"+staticCpt);
+		code = "E"+staticCpt++;
 		this.operator = operator;
 		this.rightExpression = rightExpression;
 		this.leftExpression = leftExpression;
@@ -36,7 +36,7 @@ public class Complexe extends Expression {
 		}
 	}
 
-	public boolean isLeaf() {
+	public boolean isLiteral() {
 		return false;
 	}
 
@@ -48,7 +48,11 @@ public class Complexe extends Expression {
 		return this.operator;
 	}
 
-	public Expression ComplementaryOfExpression(){
+	public void setOperator(EnumOperator operator) {
+		this.operator = operator;
+	}
+
+	public Complexe ComplementaryOfExpression(){
 		Complexe res = new Complexe(this);
 		if (!getComplement()){
 			switch(operator){
@@ -84,26 +88,6 @@ public class Complexe extends Expression {
 	public boolean equals(Complexe complexe) {
 		return super.equals(complexe) && this.numOp == complexe.getNumOp();
 	}
-
-//	public String toString(){
-//		if(this.isLeaf()){
-//			System.out.println("Est feuille");
-//			return super.toString();
-//		}
-//		if( !leftExpression.isLeaf() && !rightExpression.isLeaf()){
-//			return getNotationComplement()+"((" +leftExpression.getNotationComplement()+"( " +leftExpression.toString()+ " ) " + operator +" "+rightExpression.getNotationComplement() + "( "+rightExpression.toString()+" ))"; 
-//		}
-//		if (leftExpression.isLeaf() && !rightExpression.isLeaf()){
-//			return getNotationComplement()+"(( " +leftExpression.toString()+ " ) " + operator +" "+rightExpression.getNotationComplement() + "( "+rightExpression.toString()+" ))"; 
-//		}
-//		if (!leftExpression.isLeaf() && rightExpression.isLeaf()){
-//			return getNotationComplement()+"((" +leftExpression.getNotationComplement()+"( " +leftExpression.toString()+ " ) " + operator + " ( "+rightExpression.toString()+" ))"; 
-//		}
-//		//Right and left expression are leafs
-//		return getNotationComplement()+"(( " +leftExpression.toString()+ " ) " + operator +" ( "+rightExpression.toString()+" ))"; 
-//	}
-
-
 
 }
 

@@ -1,9 +1,20 @@
+package Arbre_Completion;
 
 public abstract class Expression {
 	private boolean complement;
+	private String nom;
 	
-	public Expression(boolean complement){
+	public Expression(boolean complement, String nom){
 		this.setComplement(complement);
+		this.setNom(nom);
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
 	public boolean getComplement() {
@@ -14,7 +25,7 @@ public abstract class Expression {
 		this.complement = complement;
 	}
 	
-	public abstract boolean isLeaf();
+	public abstract boolean isLiteral();
 	
 	public String getNotationComplement(){
 		String res= "";

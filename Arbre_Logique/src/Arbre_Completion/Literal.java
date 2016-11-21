@@ -1,9 +1,10 @@
+package Arbre_Completion;
 
 public class Literal extends Expression {
 	private String value;
 	
 	public Literal(boolean complement, String val){
-		super(complement);
+		super(complement, val);
 		this.setValue(val);
 
 	}
@@ -21,7 +22,7 @@ public class Literal extends Expression {
 		this.value = name;
 	}
 	
-	public boolean isLeaf(){
+	public boolean isLiteral(){
 		return true;
 	}
 	

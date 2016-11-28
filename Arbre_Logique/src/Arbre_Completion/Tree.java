@@ -205,9 +205,10 @@ public class Tree {
 	
 	public Expression[] toStringExpression(int level,int indexBranch){
 		Expression[] res = null; int i = 0;
-		if(indexBranch>=this.tree.get(level).size()){
+		if(indexBranch>this.tree.get(level).size()){
 			return null;
 		}
+		res = new Expression[this.tree.get(level).size()];
 		for (Expression expr : tree.get(level).getBranch(indexBranch).getExpressions()){
 			res[i++] = expr;
 		}

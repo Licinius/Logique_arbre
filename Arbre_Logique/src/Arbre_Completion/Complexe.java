@@ -28,9 +28,9 @@ public class Complexe extends Expression {
 		}
 
 		if (complexe.getRightExpression() instanceof Literal) {
-			this.leftExpression = new Literal((Literal) complexe.getRightExpression()); 
+			this.rightExpression = new Literal((Literal) complexe.getRightExpression()); 
 		} else {
-			this.leftExpression = new Complexe((Complexe) complexe.getRightExpression());
+			this.rightExpression = new Complexe((Complexe) complexe.getRightExpression());
 		}
 	}
 

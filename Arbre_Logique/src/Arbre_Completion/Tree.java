@@ -144,13 +144,19 @@ public class Tree {
 		tree.add(tmp);
 	}
 	
+	//Getters & Setters
+	public int getNbLevel() {
+		return this.tree.size();
+	}
+	
 	//Methods
 	public void addExpression(Expression expression,int level,int indexBranch){
-		if(level>=this.tree.size()){
-			Level tmp = new Level();
-			tree.add(tmp);
-		}
-		this.tree.get(level).getBranch(indexBranch).addExpression(expression);
+//		if(level>=this.tree.size()){
+//			Level tmp = new Level();
+//			tree.add(tmp);
+//		}
+//		this.tree.get(level).getBranch(indexBranch).addExpression(expression);
+		this.tree.add(new Level(expression));
 	}
 
 	public void copyExpressionsExept(Expression expression,int levelBegin,int indexBranchBegin,int indexBranchEnd){
@@ -191,8 +197,30 @@ public class Tree {
 		String res= "";
 		int i =0;
 		for (Expression expr: tree.get(level).getBranch(indexBranch).getExpressions()){
-			res += (i++) + " : " +expr.toString()+"\n";
+			res += (i++) + " : " +expr.toString()+"\t";
 
+		}
+		return res;
+	}
+	
+	public Expression[] toStringExpression(int level,int indexBranch){
+		Expression[] res = null; int i = 0;
+		if(indexBranch>=this.tree.get(level).size()){
+			return null;
+		}
+		for (Expression expr : tree.get(level).getBranch(indexBranch).getExpressions()){
+			res[i++] = expr;
+		}
+		return res;
+	}
+	
+	public String toString() {
+		String res = "";
+		for (int i=0; i<this.tree.size(); i++) {
+			for (int j=0; j<this.tree.get(i).size(); j++) {
+				res += this.toStringExpressionOfBranch(i, j);
+			}
+			res += "\n";
 		}
 		return res;
 	}

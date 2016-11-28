@@ -1,15 +1,20 @@
 package View_Arbre_Completion;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
 import Arbre_Completion.*;
+import Controller_Arbre_Completion.ControllerTree;
 public class MyFrame extends JFrame{
-	private Tree treeProof;
+	
+	private ControllerTree controller;
+	private Tree[][] treesToProof=new Tree[4][3];
 	private JMenu[] menuHorizontal = new JMenu[4];
-	private JMenuItem[][] menuVertical = new JMenuItem[4][3];
+	private MyJMenuItem[][] menuVertical = new MyJMenuItem[4][3];
 	private JMenuBar barMenu;
-	private Tree[][] matriceTree;
+	private JPanel treePanel;
 	
 	public MyFrame(Tree[][] matriceTree){
 		//this.matriceTree = matriceTree;
@@ -21,8 +26,9 @@ public class MyFrame extends JFrame{
 		for (Tree[] trees : matriceTree) {
 			menuHorizontal[i] =  new JMenu("Niveau : " + (i+1));
 			for (int j = 0; j < trees.length; j++) {
-				System.out.println("i "+ i + "j " + j);
-				menuVertical[i][j] = new JMenuItem(trees[j].toStringExpressionOfBranch(0, 0));
+				treesToProof[i][j] = matriceTree [i][j];
+				menuVertical[i][j] = new MyJMenuItem(trees[j].toStringExpressionOfBranch(0, 0),i,j);
+				menuVertical[i][j].addActionListener(new JMenuListener());
 				menuHorizontal[i].add(menuVertical[i][j]);
 			}
 			barMenu.add(menuHorizontal[i]);
@@ -32,6 +38,36 @@ public class MyFrame extends JFrame{
 		
 	}
 	
+	public void printTree(Tree tree){
+		
+		System.out.println("J'ai créer un panel");
+		treePanel = new JPanel();
+		int width  = tree.getNbLevel();
+		int height = (tree.getNbLevel()-1)*2;
+		if(width<=20) width=800;
+		else width = width *40;
+		
+		//Pour le moment 
+		height = 800;
+			
+		treePanel.setSize(width,height);
+		this.add(treePanel);
+		int nbBranchMax = (int) Math.pow(2,tree.getNbLevel());
+		for (int i = 0; i < tree.getNbLevel(); i++) {
+			for (int j = 0; j < nbBranchMax; j++) {
+				System.out.println(tree.toStringExpressionOfBranch(i, 0));
+			}
+		}
+		
+	}
+	
+	
+	class JMenuListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			MyJMenuItem menuItem= (MyJMenuItem)e.getSource();
+			printTree(treesToProof[menuItem.getI()][menuItem.getJ()]);
+		}
+	}
 	public static void main(String[] args) {
 			
 		Expression E1 = new Literal(false,"p");

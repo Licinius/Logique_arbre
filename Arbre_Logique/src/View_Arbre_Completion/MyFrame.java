@@ -40,7 +40,6 @@ public class MyFrame extends JFrame{
 	
 	public void printTree(Tree tree){
 		
-		System.out.println("J'ai créer un panel");
 		treePanel = new JPanel();
 		int width  = tree.getNbLevel();
 		int height = (tree.getNbLevel()-1)*2;
@@ -52,10 +51,15 @@ public class MyFrame extends JFrame{
 			
 		treePanel.setSize(width,height);
 		this.add(treePanel);
-		int nbBranchMax = (int) Math.pow(2,tree.getNbLevel());
+		int nbBranchMax = (int) Math.pow(2,tree.getNbLevel()-1);
 		for (int i = 0; i < tree.getNbLevel(); i++) {
 			for (int j = 0; j < nbBranchMax; j++) {
-				System.out.println(tree.toStringExpressionOfBranch(i, 0));
+				Expression[] exprs = tree.toStringExpression(i,j);
+				if (exprs.length>0){
+					for(Expression expr : exprs){
+						System.out.println(expr);
+					}
+				}
 			}
 		}
 		

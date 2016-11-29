@@ -103,11 +103,11 @@ public class Tree {
 		}
 		public Level(Expression expr){
 			branchs = new ArrayList<Branch>();	
-			Branch tmp = new Branch(expr);
-			branchs.add(tmp);
+			branchs.add(new Branch(expr));
 		}
 		public Level(){
 			branchs = new ArrayList<Branch>();
+			branchs.add(new Branch());
 		}
 		
 		//Getters & Setters
@@ -119,7 +119,9 @@ public class Tree {
 		public boolean isBranchBlocked(int index){
 			return branchs.get(index).isBlocked();
 		}
-		
+		public void createBranch(){
+			branchs.add(new Branch());
+		}
 		public void addBranch(Branch branch){
 			branchs.add(branch);
 		}
@@ -148,14 +150,11 @@ public class Tree {
 	public int getNbLevel() {
 		return this.tree.size();
 	}
-	
+	public int getNbBranchOfLevel(int i) {
+		return tree.get(i).size();
+	}
 	//Methods
-	public void addExpression(Expression expression,int level,int indexBranch){
-//		if(level>=this.tree.size()){
-//			Level tmp = new Level();
-//			tree.add(tmp);
-//		}
-//		this.tree.get(level).getBranch(indexBranch).addExpression(expression);
+	public void addExpression(Expression expression){
 		this.tree.add(new Level(expression));
 	}
 
@@ -169,27 +168,33 @@ public class Tree {
 	public void developExpression(int index,int level,int indexBranch){
 		if (!tree.get(level).getBranch(indexBranch).getExpression(index).isLiteral()) {
 			Complexe expr = new Complexe((Complexe) tree.get(level).getBranch(indexBranch).getExpression(index));
-
-			if (!expr.getComplement()) {
+			if (expr.getComplement()) {
 				expr = expr.ComplementaryOfExpression();
 			}
-
 			switch(expr.getOperator()){
-			case AND:
-				addExpression(expr.getRightExpression(),level+1,0);
-				addExpression(expr.getLeftExpression(),level+1,0);
-				copyExpressionsExept(expr,level,0,0);
-				break;
-			case OR:
-				addExpression(expr.getRightExpression(),level+1,0);
-				addExpression(expr.getLeftExpression(),level+1,1);
-				copyExpressionsExept(expr,level,0,0);
-				copyExpressionsExept(expr,level,0,1);
-				break;
-			case IMPLICATION:
-				expr.getLeftExpression().reverseComplement();
-				expr.setOperator(EnumOperator.OR);
-				break;
+				case AND:
+					this.tree.add(new Level());
+					this.tree.get(level+1).getBranch(0).addExpression(expr.getRightExpression());
+					this.tree.get(level+1).getBranch(0).addExpression(expr.getLeftExpression());
+					copyExpressionsExept(expr,level,0,0);
+					break;
+				case OR:
+					this.tree.add(new Level());
+					this.tree.get(level+1).getBranch(0).addExpression(expr.getRightExpression());
+					this.tree.get(level+1).createBranch();
+					this.tree.get(level+1).getBranch(1).addExpression(expr.getLeftExpression());
+					copyExpressionsExept(expr,level,0,0);
+					copyExpressionsExept(expr,level,0,1);
+					break;
+				case IMPLICATION:
+					this.tree.add(new Level());
+					expr.getRightExpression().reverseComplement();
+					this.tree.get(level+1).getBranch(0).addExpression(expr.getRightExpression());
+					this.tree.get(level+1).createBranch();
+					this.tree.get(level+1).getBranch(1).addExpression(expr.getLeftExpression());
+					copyExpressionsExept(expr,level,0,0);
+					copyExpressionsExept(expr,level,0,1);
+					break;
 			}
 		}
 	}
@@ -203,15 +208,17 @@ public class Tree {
 		return res;
 	}
 	
-	public Expression[] toStringExpression(int level,int indexBranch){
-		Expression[] res = null; int i = 0;
-		if(indexBranch>this.tree.get(level).size()){
+	public String[] toStringExpression(int level,int indexBranch){
+		String[] res = null; int i = 0;
+		if(indexBranch>this.tree.get(level).size()-1){
 			return null;
 		}
-		res = new Expression[this.tree.get(level).size()];
+		res = new String[this.tree.get(level).size()];
 		for (Expression expr : tree.get(level).getBranch(indexBranch).getExpressions()){
-			res[i++] = expr;
+			System.out.println("toStringExpression " +expr.toString() + "taille res : " + res.length);
+			res[i++] = expr.toString();
 		}
+
 		return res;
 	}
 	
@@ -219,11 +226,13 @@ public class Tree {
 		String res = "";
 		for (int i=0; i<this.tree.size(); i++) {
 			for (int j=0; j<this.tree.get(i).size(); j++) {
-				res += this.toStringExpressionOfBranch(i, j);
+				res +="niveau : " + i + " -> "+this.toStringExpressionOfBranch(i, j);
 			}
 			res += "\n";
 		}
 		return res;
 	}
+
+
 
 }

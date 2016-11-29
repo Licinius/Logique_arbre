@@ -14,6 +14,7 @@ public class ControllerTree {
 	
 	public void developExpression(int index,int level,int indexBranch){
 		model.developExpression(index, level, indexBranch);
+		updateView();
 	}
 	
 	public void updateView(){				

@@ -14,7 +14,7 @@ public class MyFrame extends JFrame{
 	private JMenu[] menuHorizontal = new JMenu[4];
 	private MyJMenuItem[][] menuVertical = new MyJMenuItem[4][3];
 	private JMenuBar barMenu;
-	private JPanel treePanel;
+	private JPanel treePanel=new JPanel();;
 	
 	public MyFrame(Tree[][] matriceTree){
 		//this.matriceTree = matriceTree;
@@ -35,12 +35,14 @@ public class MyFrame extends JFrame{
 			i++;
 		}
 		setJMenuBar(barMenu);
+		add(treePanel);
 		
 	}
 	
 	public void printTree(Tree tree){
-		
-		treePanel = new JPanel();
+		System.out.println("tree: "+tree.toString());
+		controller = new ControllerTree(tree,this);
+		treePanel.removeAll();
 		int width  = tree.getNbLevel();
 		int height = (tree.getNbLevel()-1)*2;
 		if(width<=20) width=800;
@@ -50,19 +52,22 @@ public class MyFrame extends JFrame{
 		height = 800;
 			
 		treePanel.setSize(width,height);
-		this.add(treePanel);
-		int nbBranchMax = (int) Math.pow(2,tree.getNbLevel()-1);
+		int index;
 		for (int i = 0; i < tree.getNbLevel(); i++) {
-			for (int j = 0; j < nbBranchMax; j++) {
-				Expression[] exprs = tree.toStringExpression(i,j);
+			for (int j = 0; j < tree.getNbBranchOfLevel(i); j++) {
+				String[] exprs = tree.toStringExpression(i,j);
 				if (exprs.length>0){
-					for(Expression expr : exprs){
-						System.out.println(expr);
+					index=0;
+					for(String expr : exprs){
+						MyJButton jb = new MyJButton(expr, i, j, index);
+						jb.addActionListener(new JButtonListener());
+						treePanel.add(jb);
+						index++;
 					}
 				}
 			}
 		}
-		
+		this.validate();
 	}
 	
 	
@@ -70,6 +75,13 @@ public class MyFrame extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			MyJMenuItem menuItem= (MyJMenuItem)e.getSource();
 			printTree(treesToProof[menuItem.getI()][menuItem.getJ()]);
+		}
+	}
+	
+	class JButtonListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			MyJButton button= (MyJButton)e.getSource();
+			controller.developExpression(button.getIndex(), button.getLevel(), button.getBranch());
 		}
 	}
 	public static void main(String[] args) {
@@ -83,10 +95,14 @@ public class MyFrame extends JFrame{
 		Expression Complexe2 = new Complexe (false,EnumOperator.IMPLICATION,E4,Complexe1);
 		
 		Expression Final = new Complexe(false,EnumOperator.IMPLICATION,E1,Complexe2);
-		Tree[][] matriceTree = new Tree[1][1];
+		
+		Expression Final2 = new Complexe(false,EnumOperator.OR,E1,E2);
+		Tree[][] matriceTree = new Tree[1][2];
 		matriceTree[0][0] = new Tree(Final);
+		matriceTree[0][1] = new Tree(Final2);
 		
 		MyFrame f = new MyFrame(matriceTree);
+		f.printTree(matriceTree[0][1]);
 		f.setVisible(true);
 	}
 }

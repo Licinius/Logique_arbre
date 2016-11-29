@@ -214,8 +214,9 @@ public class Tree {
 			return null;
 		}
 		res = new String[this.tree.get(level).size()];
+		if(this.tree.get(level).size()>2)
+		System.out.println(this.tree.get(level).getBranch(2));
 		for (Expression expr : tree.get(level).getBranch(indexBranch).getExpressions()){
-			System.out.println("toStringExpression " +expr.toString() + "taille res : " + res.length);
 			res[i++] = expr.toString();
 		}
 

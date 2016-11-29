@@ -52,17 +52,15 @@ public class MyFrame extends JFrame{
 		height = 800;
 			
 		treePanel.setSize(width,height);
-		int index;
 		for (int i = 0; i < tree.getNbLevel(); i++) {
 			for (int j = 0; j < tree.getNbBranchOfLevel(i); j++) {
 				String[] exprs = tree.toStringExpression(i,j);
 				if (exprs.length>0){
-					index=0;
-					for(String expr : exprs){
-						MyJButton jb = new MyJButton(expr, i, j, index);
+					System.out.println(exprs.length);
+					for(int index = 0; index<exprs.length;index++){
+						MyJButton jb = new MyJButton(exprs[index], i, j, index);
 						jb.addActionListener(new JButtonListener());
 						treePanel.add(jb);
-						index++;
 					}
 				}
 			}

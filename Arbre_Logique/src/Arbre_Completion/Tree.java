@@ -192,4 +192,22 @@ public class Tree {
 	public String getRootExpression() {
 		return this.expressions.get(0).toString();
 	}
+	
+//	public boolean setBlocked() {
+//		Expression expr1,expr2;
+//		for(Iterator<Expression> ite1 = expressions.iterator();ite1.hasNext();){
+//			expr1 = ite1.next();
+//			if (expr1.isLiteral()) {
+//				for(Iterator<Expression> ite2 = expressions.iterator();ite2.hasNext();){
+//					expr2= ite2.next();
+//					if (expr2.isLiteral() && ((Literal) expr1).isComplementary((Literal) expr2)) {
+//						setBlocked(true);
+//						return true;
+//					}
+//				}
+//			}
+//		}
+//		setBlocked(false);
+//		return false;
+//	}
 }

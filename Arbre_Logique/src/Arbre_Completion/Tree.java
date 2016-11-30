@@ -1,6 +1,7 @@
 package Arbre_Completion;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Tree {
 	ArrayList<Expression> expressions = new ArrayList<Expression>();
@@ -8,10 +9,11 @@ public class Tree {
 	private Tree rightSon;
 	int identifiant;
 	private static int cpt = 0;
-
+	private boolean blocked;
 	public Tree(Expression expr){
 		leftSon = null;
 		rightSon = null;
+		blocked=false;
 		expressions.add(expr);
 		identifiant = cpt;
 		cpt ++;
@@ -20,6 +22,7 @@ public class Tree {
 	public Tree(){
 		leftSon = null;
 		rightSon = null;
+		blocked=false;
 		identifiant = cpt;
 		cpt++;
 	}
@@ -97,12 +100,14 @@ public class Tree {
 			}
 			switch (expr.getOperator()) {
 			case AND:
+				this.blocked = true;
 				leftSon = new Tree();
 				tr.leftSon.addExpression(expr.getRightExpression());
 				tr.leftSon.addExpression(expr.getLeftExpression());
 				copyExpressionsExept(expr, true);
 				break;
 			case OR:
+				this.blocked = true;
 				leftSon = new Tree();
 				rightSon = new Tree();
 				leftSon.addExpression(expr.getRightExpression());
@@ -111,6 +116,7 @@ public class Tree {
 				copyExpressionsExept(expr, false);
 				break;
 			case IMPLICATION:
+				this.blocked = true;
 				leftSon = new Tree();
 				rightSon = new Tree();
 				expr.getRightExpression().reverseComplement();
@@ -193,21 +199,29 @@ public class Tree {
 		return this.expressions.get(0).toString();
 	}
 	
-//	public boolean setBlocked() {
-//		Expression expr1,expr2;
-//		for(Iterator<Expression> ite1 = expressions.iterator();ite1.hasNext();){
-//			expr1 = ite1.next();
-//			if (expr1.isLiteral()) {
-//				for(Iterator<Expression> ite2 = expressions.iterator();ite2.hasNext();){
-//					expr2= ite2.next();
-//					if (expr2.isLiteral() && ((Literal) expr1).isComplementary((Literal) expr2)) {
-//						setBlocked(true);
-//						return true;
-//					}
-//				}
-//			}
-//		}
-//		setBlocked(false);
-//		return false;
-//	}
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+
+	public boolean setBlocked() {
+		Expression expr1,expr2;
+		for(Iterator<Expression> ite1 = expressions.iterator();ite1.hasNext();){
+			expr1 = ite1.next();
+			if (expr1.isLiteral()) {
+				for(Iterator<Expression> ite2 = expressions.iterator();ite2.hasNext();){
+					expr2= ite2.next();
+					if (expr2.isLiteral() && ((Literal) expr1).isComplementary((Literal) expr2)) {
+						setBlocked(true);
+						return true;
+					}
+				}
+			}
+		}
+		setBlocked(false);
+		return false;
+	}
 }

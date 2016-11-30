@@ -110,8 +110,8 @@ public class Tree {
 				this.blocked = true;
 				leftSon = new Tree();
 				rightSon = new Tree();
-				leftSon.addExpression(expr.getRightExpression());
-				rightSon.addExpression(expr.getLeftExpression());
+				leftSon.addExpression(expr.getLeftExpression());
+				rightSon.addExpression(expr.getRightExpression());
 				copyExpressionsExept(expr, true);
 				copyExpressionsExept(expr, false);
 				break;
@@ -166,14 +166,21 @@ public class Tree {
 		Tree tr = rechercheTree(id);
 		String[] res = null;
 		int i = 0;
-		if (tr == null)
-			return null;
-
+		if (tr == null) return null;
 		res = new String[tr.expressions.size()];
 		for (Expression expr : tr.expressions) {
 			res[i++] = expr.toString();
 		}
 
+		return res;
+	}
+	public String[] toStringExpression() {
+		String[] res = null;
+		int i = 0;
+		res = new String[this.expressions.size()];
+		for (Expression expr : this.expressions) {
+			res[i++] = expr.toString();
+		}
 		return res;
 	}
 	public String toString(){

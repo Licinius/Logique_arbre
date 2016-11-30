@@ -12,8 +12,8 @@ public class ControllerTree {
 		this.view = frame;
 	}
 	
-	public void developExpression(int index,int indexBranch){
-		model.developExpression(index,indexBranch);
+	public void developExpression(int indexBranch,int indexExpression){
+		model.developExpression(indexBranch,indexExpression);
 		updateView();
 	}
 	

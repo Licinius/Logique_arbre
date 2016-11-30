@@ -40,22 +40,40 @@ public class MyFrame extends JFrame{
 	}
 	
 	public void printTree(Tree tree){
-		System.out.println("tree: "+tree.toString());
 		controller = new ControllerTree(tree,this);
 		treePanel.removeAll();
-		int width  = tree.getNbLevel();
-		int height = (tree.getNbLevel()-1)*2;
-		if(width<=20) width=800;
-		else width = width *40;
 		
-		//Pour le moment 
-		height = 800;
-			
+		//Parcours en largeur
+		ArrayList<Tree> AT = new ArrayList<Tree>();
+		ArrayList<Tree> dejaVu = new ArrayList<Tree>();
+		AT.add(tree); 
+		dejaVu.add(tree);
+		Tree t =null;	
+		while(!AT.isEmpty()){
+			t = AT.remove(0);
+			String[] strs = t.toStringExpression();
+			for (int i = 0; i < strs.length; i++) {
+				MyJButton jb = new MyJButton(strs[i], tree.getIdentifiant(), i);
+				jb.addActionListener(new JButtonListener());
+				treePanel.add(jb);
+			}
+			if(t.getLeftSon() != null){
+				if(!dejaVu.contains(t.getLeftSon())){
+					AT.add(t.getLeftSon());
+					dejaVu.add(t.getLeftSon());
+				}
+			}
+			if(t.getRightSon() != null){
+				if(!dejaVu.contains(t.getRightSon())){
+					AT.add(t.getRightSon());
+					dejaVu.add(t.getRightSon());
+				}
+			}
+		}
 		
 		this.validate();
 	}
-	
-	
+
 	class JMenuListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJMenuItem menuItem= (MyJMenuItem)e.getSource();
@@ -66,7 +84,7 @@ public class MyFrame extends JFrame{
 	class JButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJButton button= (MyJButton)e.getSource();
-			controller.developExpression(button.getIndex(), button.getBranch());
+			controller.developExpression(button.getBranch(),button.getIndex());
 		}
 	}
 	public static void main(String[] args) {

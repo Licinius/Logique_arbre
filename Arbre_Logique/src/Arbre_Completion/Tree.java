@@ -101,29 +101,29 @@ public class Tree {
 			switch (expr.getOperator()) {
 			case AND:
 				this.blocked = true;
-				leftSon = new Tree();
+				tr.leftSon = new Tree();
 				tr.leftSon.addExpression(expr.getRightExpression());
 				tr.leftSon.addExpression(expr.getLeftExpression());
-				copyExpressionsExept(expr, true);
+				tr.copyExpressionsExept(expr, true);
 				break;
 			case OR:
 				this.blocked = true;
-				leftSon = new Tree();
-				rightSon = new Tree();
-				leftSon.addExpression(expr.getLeftExpression());
-				rightSon.addExpression(expr.getRightExpression());
+				tr.leftSon = new Tree();
+				tr.rightSon = new Tree();
+				tr.leftSon.addExpression(expr.getLeftExpression());
+				tr.rightSon.addExpression(expr.getRightExpression());
 				copyExpressionsExept(expr, true);
 				copyExpressionsExept(expr, false);
 				break;
 			case IMPLICATION:
 				this.blocked = true;
-				leftSon = new Tree();
-				rightSon = new Tree();
+				tr.leftSon = new Tree();
+				tr.rightSon = new Tree();
 				expr.getRightExpression().reverseComplement();
-				leftSon.addExpression(expr.getRightExpression());
-				rightSon.addExpression(expr.getLeftExpression());
-				copyExpressionsExept(expr, true);
-				copyExpressionsExept(expr, false);
+				tr.leftSon.addExpression(expr.getRightExpression());
+				tr.rightSon.addExpression(expr.getLeftExpression());
+				tr.copyExpressionsExept(expr, true);
+				tr.copyExpressionsExept(expr, false);
 				break;
 			}
 		}
@@ -230,5 +230,9 @@ public class Tree {
 		}
 		setBlocked(false);
 		return false;
+	}
+	
+	public boolean equals(Tree t){
+		return t.identifiant == this.identifiant;
 	}
 }

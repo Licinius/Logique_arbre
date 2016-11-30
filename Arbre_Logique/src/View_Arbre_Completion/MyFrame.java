@@ -27,7 +27,7 @@ public class MyFrame extends JFrame{
 			menuHorizontal[i] =  new JMenu("Niveau : " + (i+1));
 			for (int j = 0; j < trees.length; j++) {
 				treesToProof[i][j] = matriceTree [i][j];
-				menuVertical[i][j] = new MyJMenuItem(trees[j].toStringExpressionOfBranch(0, 0),i,j);
+				menuVertical[i][j] = new MyJMenuItem(trees[j].getRootExpression(),i,j);
 				menuVertical[i][j].addActionListener(new JMenuListener());
 				menuHorizontal[i].add(menuVertical[i][j]);
 			}
@@ -51,20 +51,7 @@ public class MyFrame extends JFrame{
 		//Pour le moment 
 		height = 800;
 			
-		treePanel.setSize(width,height);
-		for (int i = 0; i < tree.getNbLevel(); i++) {
-			for (int j = 0; j < tree.getNbBranchOfLevel(i); j++) {
-				String[] exprs = tree.toStringExpression(i,j);
-				if (exprs.length>0){
-					System.out.println(exprs.length);
-					for(int index = 0; index<exprs.length;index++){
-						MyJButton jb = new MyJButton(exprs[index], i, j, index);
-						jb.addActionListener(new JButtonListener());
-						treePanel.add(jb);
-					}
-				}
-			}
-		}
+		
 		this.validate();
 	}
 	
@@ -79,7 +66,7 @@ public class MyFrame extends JFrame{
 	class JButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJButton button= (MyJButton)e.getSource();
-			controller.developExpression(button.getIndex(), button.getLevel(), button.getBranch());
+			controller.developExpression(button.getIndex(), button.getBranch());
 		}
 	}
 	public static void main(String[] args) {

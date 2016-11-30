@@ -53,7 +53,6 @@ public class MyFrame extends JFrame{
 			t = AT.remove(0);
 			String[] strs = t.toStringExpression();
 			for (int i = 0; i < strs.length; i++) {
-				System.out.println(strs[i]);
 				MyJButton jb = new MyJButton(strs[i], t.getIdentifiant(), i);
 				jb.addActionListener(new JButtonListener());
 				treePanel.add(jb);
@@ -71,8 +70,6 @@ public class MyFrame extends JFrame{
 				}
 			}
 		}
-		System.out.println("Tree.toString()");
-		System.out.println(tree.toString());
 		this.validate();
 		this.repaint();
 	}
@@ -87,7 +84,6 @@ public class MyFrame extends JFrame{
 	class JButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJButton button= (MyJButton)e.getSource();
-			System.out.println(button.getBranch()+" " +button.getIndex());
 			controller.developExpression(button.getBranch(),button.getIndex());
 		}
 	}

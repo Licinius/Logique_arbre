@@ -8,7 +8,7 @@ public class Complexe extends Expression {
 	private static int staticCpt = 0;
 
 
-	public Complexe(boolean complement, EnumOperator operator, Expression rightExpression, Expression leftExpression) {
+	public Complexe(boolean complement, EnumOperator operator, Expression leftExpression, Expression rightExpression) {
 		super(complement, "E"+staticCpt);
 		staticCpt++;
 		this.operator = operator;
@@ -81,7 +81,7 @@ public class Complexe extends Expression {
 	}
 	
 	public String toString(){
-		return this.getNotationComplement() + "(" +rightExpression.toString() +" "+ this.getOperator() +" "+ leftExpression.toString()+")";
+		return this.getNotationComplement() + "(" +leftExpression.toString() +" "+ this.getOperator() +" "+ rightExpression.toString()+")";
 	}
 
 }

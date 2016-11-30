@@ -25,9 +25,8 @@ public class mainArbre {
 		Expression Final3 = new Complexe(false, EnumOperator.IMPLICATION, Complexe5, Complexe6);
 
 		Tree main_tree = new Tree(Complexe3);
-		main_tree.developExpression(0, 0);
 		
-		System.out.println(main_tree.toString());
+		
 		
 	
 	}

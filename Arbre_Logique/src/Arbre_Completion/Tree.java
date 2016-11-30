@@ -10,21 +10,20 @@ public class Tree {
 	int identifiant;
 	private static int cpt = 0;
 	private boolean blocked;
+	
 	public Tree(Expression expr){
 		leftSon = null;
 		rightSon = null;
 		blocked=false;
 		expressions.add(expr);
-		identifiant = cpt;
-		cpt ++;
+		identifiant = cpt++;
 	}
 
 	public Tree(){
 		leftSon = null;
 		rightSon = null;
 		blocked=false;
-		identifiant = cpt;
-		cpt++;
+		identifiant = cpt++;
 	}
 
 	public int getIdentifiant() {
@@ -98,16 +97,15 @@ public class Tree {
 			if (expr.getComplement()) {
 				expr = expr.ComplementaryOfExpression();
 			}
+			this.blocked = true;
 			switch (expr.getOperator()) {
 			case AND:
-				this.blocked = true;
 				tr.leftSon = new Tree();
 				tr.leftSon.addExpression(expr.getRightExpression());
 				tr.leftSon.addExpression(expr.getLeftExpression());
 				tr.copyExpressionsExept(expr, true);
 				break;
 			case OR:
-				this.blocked = true;
 				tr.leftSon = new Tree();
 				tr.rightSon = new Tree();
 				tr.leftSon.addExpression(expr.getLeftExpression());
@@ -116,12 +114,11 @@ public class Tree {
 				copyExpressionsExept(expr, false);
 				break;
 			case IMPLICATION:
-				this.blocked = true;
 				tr.leftSon = new Tree();
 				tr.rightSon = new Tree();
-				expr.getRightExpression().reverseComplement();
-				tr.leftSon.addExpression(expr.getRightExpression());
-				tr.rightSon.addExpression(expr.getLeftExpression());
+				expr.getLeftExpression().reverseComplement();
+				tr.leftSon.addExpression(expr.getLeftExpression());
+				tr.rightSon.addExpression(expr.getRightExpression());
 				tr.copyExpressionsExept(expr, true);
 				tr.copyExpressionsExept(expr, false);
 				break;

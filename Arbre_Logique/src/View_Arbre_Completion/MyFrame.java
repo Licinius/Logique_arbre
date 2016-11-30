@@ -3,9 +3,17 @@ package View_Arbre_Completion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.*;
 
-import Arbre_Completion.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+
+import Arbre_Completion.Complexe;
+import Arbre_Completion.EnumOperator;
+import Arbre_Completion.Expression;
+import Arbre_Completion.Literal;
+import Arbre_Completion.Tree;
 import Controller_Arbre_Completion.ControllerTree;
 public class MyFrame extends JFrame{
 	
@@ -87,22 +95,37 @@ public class MyFrame extends JFrame{
 			controller.developExpression(button.getBranch(),button.getIndex());
 		}
 	}
+	
 	public static void main(String[] args) {
-			
-		Expression E1 = new Literal(false,"p");
-		Expression E2 = new Literal(false,"q");
 		
-		Expression E4 = new Literal(true,"q");
+		Expression E1 = new Literal(false,"p"); // p
+		Expression E2 = new Literal(false,"q"); // q
+		Expression E3 = new Literal(true,"p"); // ¬p
+		Expression E4 = new Literal(true,"q"); // ¬q
 		
-		Expression Complexe1 = new Complexe (true,EnumOperator.IMPLICATION,E1,E2);
-		Expression Complexe2 = new Complexe (false,EnumOperator.IMPLICATION,E4,Complexe1);
+		//(p → (¬q → ¬(p → q)))
+		Expression Complexe1 = new Complexe (true,EnumOperator.IMPLICATION,E1,E2); // ¬(p → q)
+		Expression Complexe2 = new Complexe (false,EnumOperator.IMPLICATION,E4,Complexe1); // (¬q → ¬(p → q))
+		Expression Final1 = new Complexe(false,EnumOperator.IMPLICATION,E1,Complexe2);
+
+		//(p → ((p → q) → q)) 
+		Expression Complexe3 = new Complexe (false, EnumOperator.IMPLICATION, E1, E2); // (p → q)
+		Expression Complexe4 = new Complexe (false, EnumOperator.IMPLICATION, Complexe3, E2); // ((p → q) → q)
+		Expression Final2 = new Complexe(false, EnumOperator.IMPLICATION, E1, Complexe4);
+
+		//((¬p → ¬q) → (q → p)) 
+		Expression Complexe5 = new Complexe (false, EnumOperator.IMPLICATION, E3, E4); // (¬p → ¬q)
+		Expression Complexe6 = new Complexe (false, EnumOperator.IMPLICATION, E2, E1); // (q → p)
+		Expression Final3 = new Complexe(false, EnumOperator.IMPLICATION, Complexe5, Complexe6);		
+
+		Expression shortFinal = new Complexe(false, EnumOperator.AND, E1, E3);
 		
-		Expression Final = new Complexe(false,EnumOperator.IMPLICATION,E1,Complexe2);
+		Tree[][] matriceTree = new Tree[2][2];
+		matriceTree[0][0] = new Tree(shortFinal);
+		matriceTree[0][1] = new Tree(Final1);
+		matriceTree[1][0] = new Tree(Final2);
+		matriceTree[1][1] = new Tree(Final3);
 		
-		Expression Final2 = new Complexe(false,EnumOperator.OR,E1,E2);
-		Tree[][] matriceTree = new Tree[1][2];
-		matriceTree[0][0] = new Tree(Final);
-		matriceTree[0][1] = new Tree(Final2);
 		
 		MyFrame f = new MyFrame(matriceTree);
 		f.setVisible(true);

@@ -49,7 +49,8 @@ public class Complexe extends Expression {
 
 	public Complexe ComplementaryOfExpression(){
 		Complexe res = new Complexe(this);
-		if (!getComplement()){
+		res.reverseComplement();
+		if (getComplement()){
 			switch(operator){
 			case AND:
 				res.operator = EnumOperator.OR;

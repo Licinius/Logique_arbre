@@ -36,7 +36,7 @@ public abstract class Expression {
 	}
 	
 	public boolean equals(Expression expr){
-		return this.complement == expr.complement;
+		return this.complement == expr.complement && this.nom == expr.nom;
 	}
 
 	public void reverseComplement() {

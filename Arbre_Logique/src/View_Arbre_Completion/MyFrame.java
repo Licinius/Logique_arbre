@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Arbre_Completion.Complexe;
@@ -22,7 +23,8 @@ public class MyFrame extends JFrame{
 	private JMenu[] menuHorizontal = new JMenu[4];
 	private MyJMenuItem[][] menuVertical = new MyJMenuItem[4][3];
 	private JMenuBar barMenu;
-	private JPanel treePanel=new JPanel();;
+	private JPanel treePanel=new JPanel();
+	private int[] lastLiteral= new int[2]; // 0 : Branch  1: Index
 	
 	public MyFrame(Tree[][] matriceTree){
 		//this.matriceTree = matriceTree;
@@ -63,8 +65,10 @@ public class MyFrame extends JFrame{
 			for (int i = 0; i < expr.length; i++) {
 				MyJButton jb = new MyJButton(expr[i].toString(), t.getIdentifiant(), i);
 				if(!t.getBlocked())	{
-					if(expr[i].isLiteral()){}
+					if(expr[i].isLiteral())jb.addActionListener(new JButtonLiteralListener());
 					else jb.addActionListener(new JButtonComplexeListener());
+				}else{
+					jb.setEnabled(false);
 				}
 				treePanel.add(jb);
 			}
@@ -94,9 +98,32 @@ public class MyFrame extends JFrame{
 	
 	class JButtonComplexeListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			lastLiteral[0]=-1;
+			lastLiteral[1]=-1;
 			MyJButton button= (MyJButton)e.getSource();
 			controller.developExpression(button.getBranch(),button.getIndex());
 		}
+	}
+	
+	class JButtonLiteralListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			MyJButton button= (MyJButton)e.getSource();	
+			System.out.println(button.getBranch());
+			if(lastLiteral[0]!=-1 && lastLiteral[1]!=-1){
+				if(lastLiteral[1]!=button.getIndex() && lastLiteral[0]==button.getBranch()){
+					controller.setBlocked(lastLiteral[0],lastLiteral[1],button.getIndex());
+					lastLiteral[0]=-1; lastLiteral[1]=-1;
+				}
+			}else{
+				lastLiteral[0]=button.getBranch();
+				lastLiteral[1]=button.getIndex();
+			}
+			
+		}
+	}
+	
+	public void showMessage(String infoMessage,String titleBar){
+		 JOptionPane.showMessageDialog(this, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public static void main(String[] args) {
@@ -109,17 +136,17 @@ public class MyFrame extends JFrame{
 		//(p → (¬q → ¬(p → q)))
 		Expression Complexe1 = new Complexe (true,EnumOperator.IMPLICATION,E1,E2); // ¬(p → q)
 		Expression Complexe2 = new Complexe (false,EnumOperator.IMPLICATION,E4,Complexe1); // (¬q → ¬(p → q))
-		Expression Final1 = new Complexe(false,EnumOperator.IMPLICATION,E1,Complexe2);
+		Expression Final1 = new Complexe(true,EnumOperator.IMPLICATION,E1,Complexe2);
 
 		//(p → ((p → q) → q)) 
 		Expression Complexe3 = new Complexe (false, EnumOperator.IMPLICATION, E1, E2); // (p → q)
 		Expression Complexe4 = new Complexe (false, EnumOperator.IMPLICATION, Complexe3, E2); // ((p → q) → q)
-		Expression Final2 = new Complexe(false, EnumOperator.IMPLICATION, E1, Complexe4);
+		Expression Final2 = new Complexe(true, EnumOperator.IMPLICATION, E1, Complexe4);
 
 		//((¬p → ¬q) → (q → p)) 
 		Expression Complexe5 = new Complexe (false, EnumOperator.IMPLICATION, E3, E4); // (¬p → ¬q)
 		Expression Complexe6 = new Complexe (false, EnumOperator.IMPLICATION, E2, E1); // (q → p)
-		Expression Final3 = new Complexe(false, EnumOperator.IMPLICATION, Complexe5, Complexe6);		
+		Expression Final3 = new Complexe(true, EnumOperator.IMPLICATION, Complexe5, Complexe6);		
 
 		Expression shortFinal = new Complexe(false, EnumOperator.AND, E1, E3);
 		

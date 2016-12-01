@@ -87,8 +87,9 @@ public class Tree {
 			if (rightSon == null)
 				rightSon = new Tree();
 			for (Expression expr : expressions) {
-				if (!expr.equals(expression))
-					this.rightSon.addExpression(expr);
+
+				if (!expr.equals(expression)){
+					this.rightSon.addExpression(expr);}
 			}
 		}
 	}
@@ -100,21 +101,21 @@ public class Tree {
 			if (expr.getComplement()) {
 				expr = expr.ComplementaryOfExpression();
 			}
-			this.blocked = true;
+			tr.blocked = true;
 			switch (expr.getOperator()) {
 			case AND:
 				tr.leftSon = new Tree();
 				tr.leftSon.addExpression(expr.getRightExpression());
 				tr.leftSon.addExpression(expr.getLeftExpression());
-				tr.copyExpressionsExept(expr, true);
+				tr.copyExpressionsExept(tr.expressions.get(indexExpression), true);
 				break;
 			case OR:
 				tr.leftSon = new Tree();
 				tr.rightSon = new Tree();
 				tr.leftSon.addExpression(expr.getLeftExpression());
 				tr.rightSon.addExpression(expr.getRightExpression());
-				copyExpressionsExept(expr, true);
-				copyExpressionsExept(expr, false);
+				copyExpressionsExept(tr.expressions.get(indexExpression), true);
+				copyExpressionsExept(tr.expressions.get(indexExpression), false);
 				break;
 			case IMPLICATION:
 				tr.leftSon = new Tree();
@@ -122,8 +123,8 @@ public class Tree {
 				expr.getLeftExpression().reverseComplement();
 				tr.leftSon.addExpression(expr.getLeftExpression());
 				tr.rightSon.addExpression(expr.getRightExpression());
-				tr.copyExpressionsExept(expr, true);
-				tr.copyExpressionsExept(expr, false);
+				tr.copyExpressionsExept(tr.expressions.get(indexExpression), true);
+				tr.copyExpressionsExept(tr.expressions.get(indexExpression), false);
 				break;
 			}
 		}
@@ -142,6 +143,13 @@ public class Tree {
 		if (leftSon != null && rightSon != null)
 			return isNotNull(rightSon.rechercheTree(id), leftSon.rechercheTree(id));
 		return null;
+	}
+	public boolean setBlocked(int indexBranch,int indexExpression1, int indexExpression2){
+		Tree tr = rechercheTree(indexBranch);
+		if (tr.expressions.get(indexExpression1) instanceof Literal && tr.expressions.get(indexExpression2) instanceof Literal){
+			setBlocked(((Literal)tr.expressions.get(indexExpression1)).isComplementary((Literal)tr.expressions.get(indexExpression2)));
+		}
+		return blocked;
 	}
 
 	private Tree isNotNull(Tree rechercheTree, Tree rechercheTree2) {

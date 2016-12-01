@@ -17,6 +17,20 @@ public class ControllerTree {
 		updateView();
 	}
 	
+	public void setBlocked(int indexBranch,int indexExpression1, int indexExpression2){
+		boolean isBlocked = model.setBlocked(indexBranch,indexExpression1,indexExpression2);
+		printBranchBlocked(isBlocked);
+		if(isBlocked) updateView();
+	}
+	public void printBranchBlocked(boolean isBlocked){
+		String titleBar = " Information sur la branche";
+		String infoMessage = "";
+		if(isBlocked)	infoMessage+="Vous avez selectionné des literaux complémentaire la branche est donc verrouillé";
+		else	infoMessage+="Vous n'avez pas selectionner de literaux complementaire";
+		
+		view.showMessage(infoMessage, titleBar);
+	}
+	
 	public void updateView(){				
 		view.printTree(model);
 	}	

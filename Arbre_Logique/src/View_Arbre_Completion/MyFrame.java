@@ -108,7 +108,6 @@ public class MyFrame extends JFrame{
 	class JButtonLiteralListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJButton button= (MyJButton)e.getSource();	
-			System.out.println(button.getBranch());
 			if(lastLiteral[0]!=-1 && lastLiteral[1]!=-1){
 				if(lastLiteral[1]!=button.getIndex() && lastLiteral[0]==button.getBranch()){
 					controller.setBlocked(lastLiteral[0],lastLiteral[1],button.getIndex());

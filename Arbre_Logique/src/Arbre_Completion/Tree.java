@@ -147,9 +147,9 @@ public class Tree {
 	public boolean setBlocked(int indexBranch,int indexExpression1, int indexExpression2){
 		Tree tr = rechercheTree(indexBranch);
 		if (tr.expressions.get(indexExpression1) instanceof Literal && tr.expressions.get(indexExpression2) instanceof Literal){
-			setBlocked(((Literal)tr.expressions.get(indexExpression1)).isComplementary((Literal)tr.expressions.get(indexExpression2)));
+			tr.setBlocked(((Literal)tr.expressions.get(indexExpression1)).isComplementary((Literal)tr.expressions.get(indexExpression2)));
 		}
-		return blocked;
+		return tr.blocked;
 	}
 
 	private Tree isNotNull(Tree rechercheTree, Tree rechercheTree2) {

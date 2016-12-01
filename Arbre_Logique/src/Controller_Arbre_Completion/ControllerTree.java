@@ -20,7 +20,7 @@ public class ControllerTree {
 	public void setBlocked(int indexBranch,int indexExpression1, int indexExpression2){
 		boolean isBlocked = model.setBlocked(indexBranch,indexExpression1,indexExpression2);
 		printBranchBlocked(isBlocked);
-		if(isBlocked) updateView();
+		updateView();
 	}
 	public void printBranchBlocked(boolean isBlocked){
 		String titleBar = " Information sur la branche";

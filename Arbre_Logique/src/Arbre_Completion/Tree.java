@@ -57,6 +57,9 @@ public class Tree {
 	public void setRightSon(Tree rightSon) {
 		this.rightSon = rightSon;
 	}
+	public boolean getBlocked(){
+		return blocked;
+	}
 
 	public int getNbLevel() {
 		if (leftSon == null && rightSon != null)
@@ -127,6 +130,7 @@ public class Tree {
 
 	}
 
+
 	private Tree rechercheTree(int id) {
 		if (id == identifiant) {
 			return this;
@@ -177,6 +181,16 @@ public class Tree {
 		res = new String[this.expressions.size()];
 		for (Expression expr : this.expressions) {
 			res[i++] = expr.toString();
+		}
+		return res;
+	}
+	
+	public Expression[] getExpressionsInArray() {
+		Expression[] res = null;
+		int i = 0;
+		res = new Expression[this.expressions.size()];
+		for (Expression expr : this.expressions) {
+			res[i++] = expr;
 		}
 		return res;
 	}

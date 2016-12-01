@@ -59,10 +59,13 @@ public class MyFrame extends JFrame{
 		Tree t =null;	
 		while(!AT.isEmpty()){
 			t = AT.remove(0);
-			String[] strs = t.toStringExpression();
-			for (int i = 0; i < strs.length; i++) {
-				MyJButton jb = new MyJButton(strs[i], t.getIdentifiant(), i);
-				jb.addActionListener(new JButtonListener());
+			Expression[] expr = t.getExpressionsInArray();
+			for (int i = 0; i < expr.length; i++) {
+				MyJButton jb = new MyJButton(expr[i].toString(), t.getIdentifiant(), i);
+				if(!t.getBlocked())	{
+					if(expr[i].isLiteral()){}
+					else jb.addActionListener(new JButtonComplexeListener());
+				}
 				treePanel.add(jb);
 			}
 			if(t.getLeftSon() != null){
@@ -89,7 +92,7 @@ public class MyFrame extends JFrame{
 		}
 	}
 	
-	class JButtonListener implements ActionListener{
+	class JButtonComplexeListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MyJButton button= (MyJButton)e.getSource();
 			controller.developExpression(button.getBranch(),button.getIndex());

@@ -19,8 +19,12 @@ public class ControllerTree {
 	
 	public void setBlocked(int indexBranch,int indexExpression1, int indexExpression2){
 		boolean isBlocked = model.setBlocked(indexBranch,indexExpression1,indexExpression2);
-		printBranchBlocked(isBlocked);
-		updateView();
+		if (model.isFinished()) view.printFinished();
+		else{
+			printBranchBlocked(isBlocked);
+			if (isBlocked) updateView();
+		}
+
 	}
 	public void printBranchBlocked(boolean isBlocked){
 		String titleBar = " Information sur la branche";
@@ -33,5 +37,10 @@ public class ControllerTree {
 	
 	public void updateView(){				
 		view.printTree(model);
-	}	
+	}
+	
+	public void RAZ() {
+		model.RAZ();
+		view.RAZ();
+	}
 }

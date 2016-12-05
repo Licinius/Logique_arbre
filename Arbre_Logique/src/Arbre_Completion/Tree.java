@@ -254,4 +254,22 @@ public class Tree {
 	public boolean equals(Tree t){
 		return t.identifiant == this.identifiant;
 	}
+	
+	public boolean isFinished() {
+		if (this.rightSon == null && this.leftSon == null) {
+			return this.isBlocked();
+		} else if (this.rightSon == null) {
+			return this.leftSon.isFinished();
+		} else if (this.leftSon == null) {
+			return this.rightSon.isFinished();
+		} else {
+			return this.rightSon.isFinished() && this.leftSon.isFinished();
+		}
+	}
+	
+	public void RAZ() {
+		this.setBlocked(false);
+		this.rightSon = null;
+		this.leftSon = null;
+	}
 }
